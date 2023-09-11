@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { AppContext } from "../../AppContext"
 import finnHub from "../../api/finnHub"
+import { BiSolidUpArrow, BiSolidDownArrow } from 'react-icons/bi' 
 
 export default function StockList() {
 
@@ -8,8 +9,10 @@ export default function StockList() {
     // console.log(watchList)
     const [stocks, setStocks] = useState([])
     console.log(stocks)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
+        setLoading(true) 
         console.log("stocklist -> useeffect ran")
         let isMounted = true 
         async function fetchData() {
@@ -44,12 +47,27 @@ export default function StockList() {
             } catch(error) {
 
             }
+            setLoading(false)
         }
         fetchData()
         return () => isMounted = false
     }, [watchList])
 
 
+    function changeColor(data) {
+        if(data < 0) {
+            return 'text-danger'
+        } else return 'text-success'
+    }
+    function changeArrow(data) {
+        if(data < 0) {
+            return <BiSolidDownArrow />
+        } else return <BiSolidUpArrow />
+    }
+
+    if(stocks.length === 0) {
+        return <h1>Loading...</h1>
+    }
     return (
         <div>
             <table className='table'>
@@ -70,16 +88,16 @@ export default function StockList() {
                         stocks.map((item) => {
                             const { data, symbol } = item 
                             return (
-                                    <tr key={symbol}>
-                                        <th scope='row'>{symbol}</th>
-                                        <td> {data.c} </td>
-                                        <td> {data.d} </td>
-                                        <td> {data.dp} </td>
-                                        <td> {data.h.toFixed(2)} </td>
-                                        <td> {data.l.toFixed(2)} </td>
-                                        <td> {data.o} </td>
-                                        <td> {data.pc} </td>
-                                    </tr>
+                                <tr key={symbol}>
+                                    <th scope='row'>{symbol}</th>
+                                    <td> {data.c} </td>
+                                    <td className={changeColor(data.d)}> {data.d} </td>
+                                    <td className={changeColor(data.dp)}> {data.dp.toFixed(2)} {changeArrow(data.dp)} </td>
+                                    <td> {data.h.toFixed(2)} </td>
+                                    <td> {data.l.toFixed(2)} </td>
+                                    <td> {data.o} </td>
+                                    <td> {data.pc} </td>
+                                </tr>
                             )
                         })
                     }

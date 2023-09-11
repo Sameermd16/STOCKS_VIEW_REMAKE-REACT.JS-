@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 import StocksOverview from './pages/StocksOverview'
 import { AppContextProvider } from './AppContext'
-
+import StockDetail from './pages/StockDetail'
 
 function App() {
 
@@ -13,9 +13,8 @@ function App() {
     <AppContextProvider>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<StocksOverview />}>
-
-          </Route>
+          <Route path='/' element={<StocksOverview />} />
+          <Route path='/detail/:symbol' element={<StockDetail />} />
         </Routes>
       </BrowserRouter>
     </AppContextProvider>

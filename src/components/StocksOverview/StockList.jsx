@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import { AppContext } from "../../AppContext"
 import finnHub from "../../api/finnHub"
 import { BiSolidUpArrow, BiSolidDownArrow } from 'react-icons/bi' 
+import { useNavigate } from "react-router-dom"
 
 export default function StockList() {
 
@@ -10,6 +11,8 @@ export default function StockList() {
     const [stocks, setStocks] = useState([])
     console.log(stocks)
     const [loading, setLoading] = useState(false)
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         setLoading(true) 
@@ -65,12 +68,17 @@ export default function StockList() {
         } else return <BiSolidUpArrow />
     }
 
+    function selectedStockDetail(symbol) {
+        console.log("stock clicked for detail")
+        navigate(`detail/${symbol}`)
+    }
+
     if(stocks.length === 0) {
         return <h1>Loading...</h1>
     }
     return (
         <div>
-            <table className='table'>
+            <table className='table table-hover'>
                 <thead>
                     <tr>
                         <th scope='column'>Name</th>
@@ -88,10 +96,10 @@ export default function StockList() {
                         stocks.map((item) => {
                             const { data, symbol } = item 
                             return (
-                                <tr key={symbol}>
+                                <tr key={symbol} onClick={() => selectedStockDetail(symbol)} >
                                     <th scope='row'>{symbol}</th>
                                     <td> {data.c} </td>
-                                    <td className={changeColor(data.d)}> {data.d} </td>
+                                    <td className={changeColor(data.d)}> {data.d} {changeArrow(data.dp)} </td>
                                     <td className={changeColor(data.dp)}> {data.dp.toFixed(2)} {changeArrow(data.dp)} </td>
                                     <td> {data.h.toFixed(2)} </td>
                                     <td> {data.l.toFixed(2)} </td>

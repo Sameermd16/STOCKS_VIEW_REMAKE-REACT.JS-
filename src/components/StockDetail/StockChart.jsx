@@ -9,7 +9,14 @@ export default function StockChart({ chartData, symbol}) {
 
     console.log(chartData)
 
+
+    const timeframeResult = dataTimeframe()
+    console.log(timeframeResult)
+    const color =  timeframeResult[timeframeResult.length - 1].y - timeframeResult[0].y > 0 ? "#26C281" : "#ed3419"
+    // console.log(something)
+
     const options = {
+        colors: [color],
         title: {
             text: symbol,
         },

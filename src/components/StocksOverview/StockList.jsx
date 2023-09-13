@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom"
 
 export default function StockList() {
 
-    const { watchList } = useContext(AppContext)
+    const { watchList, setWatchList } = useContext(AppContext)
     // console.log(watchList)
     const [stocks, setStocks] = useState([])
     console.log(stocks)
@@ -73,6 +73,13 @@ export default function StockList() {
         navigate(`detail/${symbol}`)
     }
 
+    function deleteStock(symbol) {
+        const filteredWatchList = watchList.filter((item) => {
+            return item !== symbol
+        })
+        setWatchList(filteredWatchList)
+    }
+
     if(stocks.length === 0) {
         return <h1>Loading...</h1>
     }
@@ -104,7 +111,10 @@ export default function StockList() {
                                     <td> {data.h.toFixed(2)} </td>
                                     <td> {data.l.toFixed(2)} </td>
                                     <td> {data.o} </td>
-                                    <td> {data.pc} </td>
+                                    <td> {data.pc} <button className='btn btn-sm btn-danger' onClick={(e) => {
+                                        e.stopPropagation()
+                                        deleteStock(symbol)
+                                    }}>close</button> </td>
                                 </tr>
                             )
                         })

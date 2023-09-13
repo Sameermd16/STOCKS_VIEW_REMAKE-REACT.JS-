@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import finnHub from "../../api/finnHub";
+import { AppContext } from "../../AppContext";
 
 export default function AutoComplete() {
 
+  const { watchList, setWatchList } = useContext(AppContext)
+  console.log(watchList)
   const [searchInput, setSearchInput] = useState("");
-  console.log(searchInput)
+  // console.log(searchInput)
   const [searchedResults, setSearchedResults] = useState([])
-  console.log(searchedResults)
+  // console.log(searchedResults)
 
   useEffect(() => {
     let isMounted = true 
@@ -16,7 +19,7 @@ export default function AutoComplete() {
                 q: searchInput
             }
         })
-        console.log(data.result)
+        // console.log(data.result)
         setSearchedResults(data.result)
     }
     if(searchInput.length > 0) {
@@ -29,6 +32,15 @@ export default function AutoComplete() {
     if(searchInput.length > 0) {
       return 'show'
     } else return null 
+  }
+
+  function addStockToWatchList(symbol) {
+    if(watchList.indexOf(symbol) === -1) {
+      setWatchList(
+        [...watchList, symbol]
+      )
+      setSearchInput('')
+    }
   }
  
   const ulStyles = {
@@ -53,7 +65,7 @@ export default function AutoComplete() {
             {
                 searchedResults.map((item) => {
                     const { description, symbol } = item
-                    return <li className='dropdown-item'> {description} ({symbol}) </li>
+                    return <li className='dropdown-item' onClick={() => addStockToWatchList(symbol)}> {description} ({symbol}) </li>
                 })
             }
         </ul>

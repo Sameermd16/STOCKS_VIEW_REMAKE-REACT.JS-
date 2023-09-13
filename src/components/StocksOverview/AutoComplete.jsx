@@ -5,7 +5,7 @@ import { AppContext } from "../../AppContext";
 export default function AutoComplete() {
 
   const { watchList, setWatchList } = useContext(AppContext)
-  console.log(watchList)
+  // console.log(watchList)
   const [searchInput, setSearchInput] = useState("");
   // console.log(searchInput)
   const [searchedResults, setSearchedResults] = useState([])
